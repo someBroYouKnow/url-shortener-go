@@ -1,0 +1,24 @@
+
+services:
+  redis:
+    image: redis:latest 
+    container_name: my-redis-instance 
+    ports:
+      - "6379:6379" 
+    volumes: 
+      - redis_data:/data 
+    command: redis-server --appendonly yes # Start Redis with AOF persistence enabled
+
+  nginx:
+    image: nginx:latest  
+    container_name: my-nginx-instance 
+    ports:
+      - "80:80"    
+      - "443:443"  
+    volumes: 
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro 
+    depends_on:
+      - redis # Ensure Redis starts before Nginx  
+
+volumes: 
+  redis_data: 
